@@ -22,6 +22,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.sommeliervinhos.screens.WelcomeGif
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +49,7 @@ fun WelcomeScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        WelcomeGif() // AQUI ⬅️ inserido como componente
         Text("🍷 Sommelier Virtual", fontSize = 28.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
         Text(

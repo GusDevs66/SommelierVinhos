@@ -22,13 +22,11 @@ fun WelcomeScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        WelcomeGif() // AQUI ⬅️ inserido como componente
+        Spacer(modifier = Modifier.height(24.dp))
         Text("🍷 Sommelier Virtual", fontSize = 28.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            "Encontre o vinho ideal para sua refeição",
-            textAlign = TextAlign.Center,
-            fontSize = 16.sp
-        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Text("Encontre o vinho ideal para sua refeição", textAlign = TextAlign.Center, fontSize = 16.sp)
         Spacer(modifier = Modifier.height(32.dp))
         Button(onClick = { navController.navigate("foodSelection") }) {
             Text("Começar")

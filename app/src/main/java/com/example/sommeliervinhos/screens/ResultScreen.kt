@@ -12,23 +12,25 @@ import com.example.sommeliervinhos.model.Wine
 
 
 @Composable
-fun ResultScreen(navController: NavHostController) {
-    val mockWines: List<Wine> = listOf(
-        Wine("Cabernet Sauvignon", "Tinto", listOf("Carne Vermelha"), 89.90),
-        Wine("Chardonnay", "Branco", listOf("Peixe"), 59.90),
-        Wine("Malbec", "Tinto", listOf("Massa", "Carne Vermelha"), 75.00)
-    )
+fun ResultScreen(navController: NavHostController, selectedFoods: List<String>, maxPrice: Float) {
+    val context = LocalContext.current
+    val wines = remember { loadWinesFromAssets(context) }
+
+    val filteredWines = wines.filter { wine ->
+        wine.pairing.any { dish -> selectedFoods.contains(dish) } && wine.price <= maxPrice
+    }
 
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        items(mockWines) { wine ->
+        items(filteredWines) { wine ->
             Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text(wine.name, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, fontSize = 20.sp)
+                    Text(wine.name, fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     Text(wine.type)
-                    Text("Harmoniza com: ${wine.harmonization.joinToString()} ")
-                    Text("Preço: R$ ${wine.price}")
+                    Text("Harmoniza com: ${wine.pairing.joinToString()}")
+                    Text("Preço: R$ %.2f".format(wine.price))
                 }
             }
         }
     }
 }
+

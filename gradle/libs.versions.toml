@@ -10,6 +10,8 @@ activityCompose = "1.8.0"
 composeBom = "2024.09.00"
 
 [libraries]
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.4.0" }
+coil-gif = { group = "io.coil-kt", name = "coil-gif", version = "2.4.0" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version = "2.7.1" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
