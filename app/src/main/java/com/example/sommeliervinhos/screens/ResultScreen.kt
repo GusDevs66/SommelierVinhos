@@ -35,7 +35,7 @@ fun ResultScreen(
     }
 
     val filteredWines = wines.filter { wine ->
-        val matchesFood = selectedFoods.any { selected ->
+        val matchesFood = selectedFoods.isEmpty() || selectedFoods.any { selected ->
             wine.pairing.any { it.contains(selected, ignoreCase = true) }
         }
 

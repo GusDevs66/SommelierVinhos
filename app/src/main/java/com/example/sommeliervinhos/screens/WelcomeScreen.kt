@@ -64,7 +64,7 @@ fun WelcomeScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(6.dp))
 
         Button(
-            onClick = { navController.navigate("occasionSelection") },
+            onClick = { navController.navigate("occasion") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 24.dp, end = 24.dp, bottom = 40.dp)

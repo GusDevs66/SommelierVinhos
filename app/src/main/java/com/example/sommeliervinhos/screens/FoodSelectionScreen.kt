@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -22,14 +23,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-import androidx.compose.ui.draw.clip
-
 
 @Composable
-fun FoodSelectionScreen(
-    navController: NavHostController,
-    occasion: String
-) {
+fun FoodSelectionScreen(navController: NavHostController, occasion: String) {
     val foodOptions = listOf("Massa🍝", "Carne Vermelha🍖", "Peixe🎣", "Frango🐓", "Risoto🍽️", "Queijos🧀", "Petiscos🥜", "Sobremesa🍰")
     val selectedFoods = remember { mutableStateListOf<String>() }
 
@@ -54,7 +50,7 @@ fun FoodSelectionScreen(
             modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(256.dp))
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -84,7 +80,7 @@ fun FoodSelectionScreen(
                         text = food,
                         fontSize = 60.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black,
+                        color = Color.White,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -96,14 +92,14 @@ fun FoodSelectionScreen(
         Button(
             onClick = {
                 val encodedFoods = URLEncoder.encode(
-                    selectedFoods.joinToString(","), StandardCharsets.UTF_8.toString()
+                    if (selectedFoods.isEmpty()) "none" else selectedFoods.joinToString(","), StandardCharsets.UTF_8.toString()
                 )
                 val encodedOccasion = URLEncoder.encode(occasion, StandardCharsets.UTF_8.toString())
                 navController.navigate("wineTypeSelection/$encodedOccasion/$encodedFoods")
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
+                .height(170.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5103DE))
         ) {
             Text("Avançar", color = Color.White, fontSize = 60.sp)
@@ -115,7 +111,7 @@ fun FoodSelectionScreen(
             onClick = { navController.popBackStack() },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
+                .height(170.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE55428))
         ) {
             Text("Voltar", color = Color.White, fontSize = 60.sp)
