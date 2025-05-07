@@ -34,18 +34,15 @@ fun WelcomeGif() {
             .build()
     }
 
-    val gifResId = R.raw.animacao_logo
+    val gifUri = "android.resource://${context.packageName}/raw/animacao_logo"
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         AsyncImage(
             model = ImageRequest.Builder(context)
-                .data(gifResId) // 👈 RES ID DIRETAMENTE
+                .data(gifUri) // ✅ URI no formato esperado
                 .crossfade(true)
                 .listener(
-                    onSuccess = { _: ImageRequest, _: SuccessResult ->
-                        loadError = false
-                        Log.d("WelcomeGif", "GIF carregado com sucesso 🎉")
-                    },
+                    onSuccess = { _, _ -> loadError = false },
                     onError = { _, result ->
                         loadError = true
                         Log.e("WelcomeGif", "Erro ao carregar GIF: ${result.throwable}")
@@ -55,9 +52,8 @@ fun WelcomeGif() {
             imageLoader = imageLoader,
             contentDescription = "Animação inicial",
             modifier = Modifier
-                .width(640.dp)
-                .height(480.dp)
-
+                .width(360.dp)
+                .height(280.dp)
         )
 
         if (loadError) {

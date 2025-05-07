@@ -1,4 +1,5 @@
 [versions]
+gson = "2.10.1"
 agp = "8.9.1"
 kotlin = "2.0.21"
 coreKtx = "1.10.1"
@@ -8,8 +9,11 @@ espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.8.0"
 composeBom = "2024.09.00"
+accompanist = "0.32.0"
 
 [libraries]
+accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.4.0" }
 coil-gif = { group = "io.coil-kt", name = "coil-gif", version = "2.4.0" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version = "2.7.1" }

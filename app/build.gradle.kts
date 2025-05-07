@@ -40,6 +40,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.accompanist.flowlayout)
+    implementation(libs.coil.compose)
+    implementation(libs.gson)
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
     implementation(libs.androidx.navigation.compose)
