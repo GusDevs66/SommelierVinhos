@@ -9,7 +9,8 @@ data class Wine(
     val type: String,
     val alcohol: Double,
     val pairing: List<String>,
-    val price: Double,
+    var price: String, // 🔄 agora é var e do tipo String
     val image: String,
-    val occasions: List<String>? = null // ✅ adicionado para permitir filtro por ocasião
+    val occasions: List<String>? = null
 )
+

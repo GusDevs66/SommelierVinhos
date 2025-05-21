@@ -39,7 +39,7 @@ fun ResultScreen(
     var wines by remember { mutableStateOf(emptyList<Wine>()) }
 
     LaunchedEffect(Unit) {
-        wines = loadWinesFromAssets(context)
+        wines = VinhoViewModel().carregarVinhos()
         Log.d("WINE_DEBUG", "Loaded wines: ${wines.joinToString { it.name }}")
     }
 
