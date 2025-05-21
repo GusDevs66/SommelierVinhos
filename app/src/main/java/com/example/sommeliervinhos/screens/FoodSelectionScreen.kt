@@ -91,8 +91,10 @@ fun FoodSelectionScreen(navController: NavHostController, occasion: String) {
 
         Button(
             onClick = {
+                val cleanedFoods = selectedFoods.map { it.replace(Regex("[^\\p{L}\\p{Zs}]"), "").trim() }
                 val encodedFoods = URLEncoder.encode(
-                    if (selectedFoods.isEmpty()) "none" else selectedFoods.joinToString(","), StandardCharsets.UTF_8.toString()
+                    if (cleanedFoods.isEmpty()) "none" else cleanedFoods.joinToString(","),
+                    StandardCharsets.UTF_8.toString()
                 )
                 val encodedOccasion = URLEncoder.encode(occasion, StandardCharsets.UTF_8.toString())
                 navController.navigate("wineTypeSelection/$encodedOccasion/$encodedFoods")
