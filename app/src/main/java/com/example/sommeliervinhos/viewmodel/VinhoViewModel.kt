@@ -27,38 +27,12 @@ class VinhoViewModel : ViewModel() {
                 val vinhosComPreco = mutableListOf<Wine>()
 
                 lista.forEach { vinho ->
-                    try {
-                        val prodCodInt = vinho.prod_cod.toInt()
+                    vinho.price = ""
+                    vinhosComPreco.add(vinho)
 
-                        repository.fetchPreco(
-                            prodCod = prodCodInt,
-                            onSuccess = { preco ->
-                                vinho.price = preco
-                                vinhosComPreco.add(vinho)
-
-                                if (vinhosComPreco.size == lista.size) {
-                                    _vinhos.postValue(vinhosComPreco)
-                                    _loading.postValue(false)
-                                }
-                            },
-                            onError = {
-                                vinho.price = ""
-                                vinhosComPreco.add(vinho)
-
-                                if (vinhosComPreco.size == lista.size) {
-                                    _vinhos.postValue(vinhosComPreco)
-                                    _loading.postValue(false)
-                                }
-                            }
-                        )
-                    } catch (e: Exception) {
-                        vinho.price = ""
-                        vinhosComPreco.add(vinho)
-
-                        if (vinhosComPreco.size == lista.size) {
-                            _vinhos.postValue(vinhosComPreco)
-                            _loading.postValue(false)
-                        }
+                    if (vinhosComPreco.size == lista.size) {
+                        _vinhos.postValue(vinhosComPreco)
+                        _loading.postValue(false)
                     }
                 }
             },

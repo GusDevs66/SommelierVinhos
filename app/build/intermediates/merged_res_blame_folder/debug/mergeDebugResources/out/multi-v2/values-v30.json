@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.sommeliervinhos.app-mergeDebugResources-52:/values-v30/values-v30.xml",
+            "outputFile": "com.example.sommeliervinhos.app-mergeDebugResources-55:/values-v30/values-v30.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\carta\\.gradle\\caches\\8.11.1\\transforms\\90f15e658046d2faa3c9125fb1d44e69\\transformed\\material3-release\\res\\values-v30\\values-v30.xml",
+                    "source": "C:\\Users\\carta\\.gradle\\caches\\8.11.1\\transforms\\eca4e77e8a759b48332b507c5d1e962b\\transformed\\material3-release\\res\\values-v30\\values-v30.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

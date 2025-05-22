@@ -40,6 +40,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.compose.livedata)
+    implementation(libs.retrofit)
+    implementation(libs.gsonconverter)
     implementation(libs.accompanist.flowlayout)
     implementation(libs.coil.compose)
     implementation(libs.gson)

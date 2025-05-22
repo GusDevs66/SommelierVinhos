@@ -36,7 +36,7 @@ fun OccasionScreen(navController: NavHostController) {
     ) {
         Text(
             text = buildAnnotatedString {
-                append("🤔 Para qual finalidade\n")
+                append("Para qual finalidade\n")
                 withStyle(style = SpanStyle(color = Color.Yellow)) {
                     append("está buscando?")
                 }

@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun WineTypeScreen(navController: NavHostController, occasion: String, selectedFoods: List<String>)
 {
-    val wineTypes = listOf("Tinto Seco", "Branco Seco", "Espumante", "Rosé", "me_surpreenda")
+    val wineTypes = listOf("Tinto", "Branco Seco", "Espumante", "Rosé", "me_surpreenda")
     var selectedType by remember { mutableStateOf("") }
 
     Column(
@@ -32,7 +32,7 @@ fun WineTypeScreen(navController: NavHostController, occasion: String, selectedF
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Escolha o tipo de vinho 🍷",
+            text = "Escolha o tipo de vinho",
             fontSize = 60.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White,

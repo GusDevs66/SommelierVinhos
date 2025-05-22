@@ -32,7 +32,7 @@ fun BudgetScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Quanto você gostaria de gastar? 💰",
+            text = "Quanto você gostaria de gastar?",
             fontSize = 60.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White,

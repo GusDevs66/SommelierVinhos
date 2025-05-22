@@ -1,31 +1,24 @@
 package com.example.sommeliervinhos.screens
 
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
-import com.example.sommeliervinhos.data.loadWinesFromAssets
-import com.example.sommeliervinhos.model.Wine
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.draw.clip
-import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.ui.focus.focusModifier
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import com.example.sommeliervinhos.model.Wine
+import com.example.sommeliervinhos.viewmodel.VinhoViewModel
+import androidx.compose.runtime.livedata.observeAsState
 
 @Composable
 fun ResultScreen(
@@ -35,98 +28,74 @@ fun ResultScreen(
     selectedOccasion: String,
     selectedWineType: String
 ) {
+    val viewModel: VinhoViewModel = viewModel()
+    val wines by viewModel.vinhos.observeAsState(emptyList())
     val context = LocalContext.current
-    var wines by remember { mutableStateOf(emptyList<Wine>()) }
 
     LaunchedEffect(Unit) {
-        wines = VinhoViewModel().carregarVinhos()
-        Log.d("WINE_DEBUG", "Loaded wines: ${wines.joinToString { it.name }}")
+        viewModel.carregarVinhos()
     }
+
+    Log.d("RESULT_SCREEN", "Total vinhos carregados: ${wines.size}")
 
     val filteredWines = wines.filter { wine ->
-        val normalizedSelectedFoods = selectedFoods.map {
-            it.lowercase().trim().replace(Regex("\\s+"), " ")
-        }
-        val matchesFood = normalizedSelectedFoods.contains("none") || wine.pairing.any { pairing ->
-            val normalizedPairing = pairing.lowercase().trim().replace(Regex("\\s+"), " ")
-            normalizedSelectedFoods.any { selected ->
-                val match = normalizedPairing.contains(selected) || selected.contains(normalizedPairing) ||
-                        normalizedPairing.split(" ").any { word -> selected.contains(word) }
-                Log.d("MATCH_CHECK", "Food Compare: [$normalizedPairing] vs [$selected] → $match")
-                match
-            }
+        Log.d("FILTER_DEBUG", "Wine: ${wine.name}, Pairing: ${wine.pairing}, SelectedFoods: $selectedFoods")
+
+        val harmoniza = selectedFoods.any { food ->
+            val keyword = food.split("+").lastOrNull() ?: food
+            wine.pairing?.contains(keyword, ignoreCase = true) == true
         }
 
-        val normalizedType = selectedWineType.lowercase().trim().replace(Regex("\\s+"), " ")
-        val wineTypeNormalized = wine.type.lowercase().trim().replace(Regex("\\s+"), " ")
-        val matchesType = normalizedType == "me_surpreenda" ||
-                normalizedType in wineTypeNormalized ||
-                wineTypeNormalized in normalizedType ||
-                wineTypeNormalized.split(" ").any { word -> normalizedType.contains(word) }
+        val tipoValido = selectedWineType == "me_surpreenda" ||
+                wine.type?.contains(selectedWineType, ignoreCase = true) == true
 
-        val matchesPrice = wine.price <= maxPrice
+        Log.d("FILTER_RESULT", "${wine.name} => harmoniza: $harmoniza, tipoValido: $tipoValido")
 
-        Log.d(
-            "FILTER_LOGIC", "${wine.name} → type: ${wine.type}, price: ${wine.price}, " +
-                    "matchesType=$matchesType, matchesFood=$matchesFood, matchesPrice=$matchesPrice"
+        harmoniza && tipoValido
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Resultados da Busca",
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        matchesFood && matchesType && matchesPrice
-    }
-
-    LazyColumn(modifier = Modifier.background(Color(0xFFFFFFFF)).fillMaxSize().padding(200.dp)) {
-        items(filteredWines) { wine ->
-            Card(modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)) {
-                Column(modifier = Modifier.background(Color(0xFFDCDCDC)).padding(16.dp)) {
-                    Image(
-                        painter = rememberAsyncImagePainter(wine.image),
-                        contentDescription = "Imagem do vinho",
-                        contentScale = ContentScale.Fit, // ou .Inside
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(380.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                    )
-                    Text(
-                        wine.name,
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 40.sp,
-                        modifier = Modifier.fillMaxWidth().padding(12.dp)
-                    )
-                    Text(
-                        wine.type,
-                        modifier = Modifier.fillMaxWidth().padding(12.dp),
-                        fontSize = 22.sp,
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        "Harmoniza com: ${wine.pairing.joinToString()}",
-                        fontSize = 27.sp,
-                        modifier = Modifier.fillMaxWidth().padding(12.dp),
-                        textAlign = TextAlign.Center,
-                    )
-                    Column(modifier = Modifier.height(70.dp)) {
-                        Text(
-                            text = "Preço: R$ %.2f".format(wine.price),
-                            textAlign = TextAlign.Center,
-                            color = Color(0xFF41CD64),
-                            modifier = Modifier.fillMaxWidth().padding(12.dp),
-                            fontSize = 38.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            items(filteredWines) { wine ->
+                WineItem(wine = wine)
             }
         }
     }
-    Button(
-        onClick = { navController.navigate("welcome") },
+}
+
+@Composable
+fun WineItem(wine: Wine) {
+    Column(
         modifier = Modifier
-            .padding(16.dp)
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .background(Color(0xFFF5F5F5))
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Voltar ao início")
+        AsyncImage(
+            model = wine.image,
+            contentDescription = "Imagem do vinho",
+            modifier = Modifier
+                .height(180.dp)
+                .fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = wine.name, style = MaterialTheme.typography.bodyLarge)
+        Text(text = "Tipo: ${wine.type}", style = MaterialTheme.typography.bodyMedium)
+        Text(text = "País: ${wine.country}", style = MaterialTheme.typography.bodyMedium)
+        Text(text = "Preço: R$ ${wine.price}", style = MaterialTheme.typography.bodyMedium)
     }
 }

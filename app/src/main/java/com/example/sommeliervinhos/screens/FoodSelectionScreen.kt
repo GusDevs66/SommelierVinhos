@@ -26,7 +26,7 @@ import java.nio.charset.StandardCharsets
 
 @Composable
 fun FoodSelectionScreen(navController: NavHostController, occasion: String) {
-    val foodOptions = listOf("Massa🍝", "Carne Vermelha🍖", "Peixe🎣", "Frango🐓", "Risoto🍽️", "Queijos🧀", "Petiscos🥜", "Sobremesa🍰")
+    val foodOptions = listOf("Massa", "Carne Vermelha", "Peixe", "Frango", "Risoto", "Queijos", "Petiscos", "Sobremesa")
     val selectedFoods = remember { mutableStateListOf<String>() }
 
     Column(
@@ -38,7 +38,7 @@ fun FoodSelectionScreen(navController: NavHostController, occasion: String) {
     ) {
         Text(
             text = buildAnnotatedString {
-                append("🍽️ Escolha a refeição que\n")
+                append("Escolha a refeição que\n")
                 withStyle(style = SpanStyle(color = Color.Yellow)) {
                     append("o vinho irá acompanhar.")
                 }

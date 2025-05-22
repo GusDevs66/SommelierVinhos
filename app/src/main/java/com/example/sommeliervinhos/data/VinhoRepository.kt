@@ -27,39 +27,17 @@ class VinhoRepository {
             ) {
                 if (response.isSuccessful) {
                     val vinhos = response.body()?.data ?: emptyList()
+                    Log.d("VINHO_REPO", "Vinhos recebidos da API: ${vinhos.size}")
+                    vinhos.forEach { Log.d("VINHO_REPO", "Vinho: ${it.name}, Tipo: ${it.type}, Harmonizacao: ${it.pairing}") }
                     onSuccess(vinhos)
                 } else {
+                    Log.e("VINHO_REPO", "Erro na resposta da API: ${response.code()}")
                     onError(Exception("Erro ao buscar vinhos: ${response.code()}"))
                 }
             }
 
             override fun onFailure(call: retrofit2.Call<ApiResponse>, t: Throwable) {
-                onError(t)
-            }
-        })
-    }
-
-    fun fetchPreco(
-        prodCod: Int,
-        onSuccess: (String) -> Unit,
-        onError: (Throwable) -> Unit
-    ) {
-        val body = PriceRequest(prodCod)
-        val call = vinhoService.getPreco(token, body)
-        call.enqueue(object : retrofit2.Callback<PriceResponse> {
-            override fun onResponse(
-                call: retrofit2.Call<PriceResponse>,
-                response: retrofit2.Response<PriceResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val preco = response.body()?.data?.vlr_valores ?: ""
-                    onSuccess(preco)
-                } else {
-                    onError(Exception("Erro ao buscar preço: ${response.code()}"))
-                }
-            }
-
-            override fun onFailure(call: retrofit2.Call<PriceResponse>, t: Throwable) {
+                Log.e("VINHO_REPO", "Falha na chamada da API", t)
                 onError(t)
             }
         })
