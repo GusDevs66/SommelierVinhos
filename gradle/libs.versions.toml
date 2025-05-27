@@ -10,8 +10,13 @@ lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.8.0"
 composeBom = "2024.09.00"
 accompanist = "0.32.0"
+retrofit = "2.9.0"
+compose-livedata = "1.5.0"
 
 [libraries]
+compose-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "compose-livedata" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+gsonconverter = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version = "2.4.0" }

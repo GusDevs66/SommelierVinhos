@@ -32,7 +32,7 @@ fun BudgetScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Quanto você gostaria de gastar? 💰",
+            text = "Quanto você gostaria de gastar?",
             fontSize = 60.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White,
@@ -70,7 +70,7 @@ fun BudgetScreen(
                 val encodedOccasion = URLEncoder.encode(occasion, StandardCharsets.UTF_8.toString())
                 val encodedType = URLEncoder.encode(selectedWineType, StandardCharsets.UTF_8.toString())
 
-                navController.navigate("resultScreen/$encodedOccasion/$encodedFoods/$encodedType/$budget")
+                navController.navigate("result/$encodedOccasion/$encodedFoods/$encodedType/$budget")
             },
             modifier = Modifier
                 .fillMaxWidth()

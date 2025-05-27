@@ -26,7 +26,7 @@ import java.nio.charset.StandardCharsets
 
 @Composable
 fun FoodSelectionScreen(navController: NavHostController, occasion: String) {
-    val foodOptions = listOf("Massa🍝", "Carne Vermelha🍖", "Peixe🎣", "Frango🐓", "Risoto🍽️", "Queijos🧀", "Petiscos🥜", "Sobremesa🍰")
+    val foodOptions = listOf("Massa", "Carne", "Peixe", "Frango", "Risoto", "Queijos", "Petiscos", "Sobremesa")
     val selectedFoods = remember { mutableStateListOf<String>() }
 
     Column(
@@ -38,7 +38,7 @@ fun FoodSelectionScreen(navController: NavHostController, occasion: String) {
     ) {
         Text(
             text = buildAnnotatedString {
-                append("🍽️ Escolha a refeição que\n")
+                append("Escolha a refeição que\n")
                 withStyle(style = SpanStyle(color = Color.Yellow)) {
                     append("o vinho irá acompanhar.")
                 }
@@ -91,8 +91,10 @@ fun FoodSelectionScreen(navController: NavHostController, occasion: String) {
 
         Button(
             onClick = {
+                val cleanedFoods = selectedFoods.map { it.replace(Regex("[^\\p{L}\\p{Zs}]"), "").trim() }
                 val encodedFoods = URLEncoder.encode(
-                    if (selectedFoods.isEmpty()) "none" else selectedFoods.joinToString(","), StandardCharsets.UTF_8.toString()
+                    if (cleanedFoods.isEmpty()) "none" else cleanedFoods.joinToString(","),
+                    StandardCharsets.UTF_8.toString()
                 )
                 val encodedOccasion = URLEncoder.encode(occasion, StandardCharsets.UTF_8.toString())
                 navController.navigate("wineTypeSelection/$encodedOccasion/$encodedFoods")
