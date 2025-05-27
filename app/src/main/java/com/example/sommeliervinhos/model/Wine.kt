@@ -1,5 +1,6 @@
 package com.example.sommeliervinhos.model
 
+import android.util.Log
 import com.google.gson.annotations.SerializedName
 
 data class Wine(
@@ -19,10 +20,25 @@ data class Wine(
     val alcohol: String,
     @SerializedName("vinho_harmonizacao")
     val pairing: String,
-    var price: String,
+    var price: String = "",
     @SerializedName("vinho_imagem")
     val image: String,
     val occasions: List<String>? = null,
-    @SerializedName("prod_cod")
-    val prod_cod: String
-)
+    @SerializedName("vinho_sku")
+    val sku: String
+) : Comparable<Wine> {
+    override fun compareTo(other: Wine): Int {
+        return name.compareTo(other.name, ignoreCase = true)
+    }
+
+    fun containsKeyword(keyword: String): Boolean {
+        return name.contains(keyword, ignoreCase = true) ||
+                brand.contains(keyword, ignoreCase = true) ||
+                grape.contains(keyword, ignoreCase = true) ||
+                region.contains(keyword, ignoreCase = true)
+    }
+
+    fun logDetails(tag: String = "WINE_DEBUG") {
+        Log.d(tag, "[DEBUG] $name | SKU: $sku | Preço: $price")
+    }
+}

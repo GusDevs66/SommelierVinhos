@@ -5,8 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +30,7 @@ fun ResultScreen(
     val viewModel: VinhoViewModel = viewModel()
     val wines by viewModel.vinhos.observeAsState(emptyList())
     val context = LocalContext.current
+    var searchText by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         viewModel.carregarVinhos()
@@ -38,21 +38,22 @@ fun ResultScreen(
 
     Log.d("RESULT_SCREEN", "Total vinhos carregados: ${wines.size}")
 
-    val filteredWines = wines.filter { wine ->
-        Log.d("FILTER_DEBUG", "Wine: ${wine.name}, Pairing: ${wine.pairing}, SelectedFoods: $selectedFoods")
+    val filteredWines = wines
+        .filter { wine ->
+            val harmoniza = selectedFoods.any { food ->
+                val keyword = food.split("+").lastOrNull() ?: food
+                wine.pairing?.contains(keyword, ignoreCase = true) == true
+            }
 
-        val harmoniza = selectedFoods.any { food ->
-            val keyword = food.split("+").lastOrNull() ?: food
-            wine.pairing?.contains(keyword, ignoreCase = true) == true
+            val tipoValido = selectedWineType == "me_surpreenda" ||
+                    wine.type?.contains(selectedWineType, ignoreCase = true) == true
+
+            harmoniza && tipoValido
         }
-
-        val tipoValido = selectedWineType == "me_surpreenda" ||
-                wine.type?.contains(selectedWineType, ignoreCase = true) == true
-
-        Log.d("FILTER_RESULT", "${wine.name} => harmoniza: $harmoniza, tipoValido: $tipoValido")
-
-        harmoniza && tipoValido
-    }
+        .filter { wine ->
+            wine.containsKeyword(searchText)
+        }
+        .sorted()
 
     Column(
         modifier = Modifier
@@ -61,6 +62,15 @@ fun ResultScreen(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        TextField(
+            value = searchText,
+            onValueChange = { searchText = it },
+            label = { Text("Buscar vinho...") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        )
+
         Text(
             text = "Resultados da Busca",
             style = MaterialTheme.typography.titleLarge,
