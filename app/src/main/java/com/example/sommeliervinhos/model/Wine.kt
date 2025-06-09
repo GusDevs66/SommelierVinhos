@@ -1,44 +1,28 @@
 package com.example.sommeliervinhos.model
 
-import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
+// Define estrutura base da resposta da API
+class ApiResponse(
+    @SerializedName("data") val data: List<Wine>
+)
+
+// Classe Wine para representar os vinhos
 data class Wine(
-    @SerializedName("vinho_nome")
-    val name: String,
-    @SerializedName("vinho_marca")
-    val brand: String,
-    @SerializedName("vinho_proporcao")
-    val grape: String,
-    @SerializedName("vinho_pais")
-    val country: String,
-    @SerializedName("vinho_regiao")
-    val region: String,
-    @SerializedName("vinho_tipo")
-    val type: String,
-    @SerializedName("vinho_teor")
-    val alcohol: String,
-    @SerializedName("vinho_harmonizacao")
-    val pairing: String,
-    var price: String = "",
-    @SerializedName("vinho_imagem")
-    val image: String,
-    val occasions: List<String>? = null,
-    @SerializedName("vinho_sku")
-    val sku: String
-) : Comparable<Wine> {
-    override fun compareTo(other: Wine): Int {
-        return name.compareTo(other.name, ignoreCase = true)
-    }
-
-    fun containsKeyword(keyword: String): Boolean {
-        return name.contains(keyword, ignoreCase = true) ||
-                brand.contains(keyword, ignoreCase = true) ||
-                grape.contains(keyword, ignoreCase = true) ||
-                region.contains(keyword, ignoreCase = true)
-    }
-
-    fun logDetails(tag: String = "WINE_DEBUG") {
-        Log.d(tag, "[DEBUG] $name | SKU: $sku | Preço: $price")
-    }
+    @SerializedName("vinho_id") val vinhoId: String,
+    @SerializedName("vinho_nome") val vinhoNome: String,
+    @SerializedName("vinho_pais") val vinhoPais: String?,
+    @SerializedName("vinho_regiao") val vinhoRegiao: String,
+    @SerializedName("vinho_teor") val vinhoTeor: String,
+    @SerializedName("vinho_tipo") val vinhoTipo: String,
+    @SerializedName("vinho_sku") val vinhoSku: String,
+    @SerializedName("vinho_imagem") val vinhoImg: String,
+    @SerializedName("vinho_harmonizacao") val harmonizacao: String,
+) : Serializable {
+    @Transient
+    var price: String? = null
 }

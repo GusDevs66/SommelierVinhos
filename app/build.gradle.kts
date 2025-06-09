@@ -40,6 +40,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
     implementation(libs.compose.livedata)
     implementation(libs.retrofit)
     implementation(libs.gsonconverter)

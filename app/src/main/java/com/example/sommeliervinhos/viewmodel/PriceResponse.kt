@@ -1,12 +1,11 @@
-package com.example.sommeliervinhos.model
+package com.example.sommeliervinhos.viewmodel
 import com.google.gson.annotations.SerializedName
 
-data class PriceData(
-    @SerializedName("vlr_valores")
-    val vlr_valores: String
-)
+//data class PriceResponse(
+//    val success: Boolean,
+//    val data: List<PriceData>
+//)
 
-data class PriceResponse(
-    @SerializedName("data")
-    val data: PriceData
+data class PriceData(
+    @SerializedName("vlr_valores") val vlrValores: String
 )

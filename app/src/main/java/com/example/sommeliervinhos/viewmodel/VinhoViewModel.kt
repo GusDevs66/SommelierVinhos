@@ -6,40 +6,27 @@ import androidx.lifecycle.ViewModel
 import com.example.sommeliervinhos.data.VinhoRepository
 import com.example.sommeliervinhos.model.Wine
 
-class VinhoViewModel : ViewModel() {
+// VinhoViewModel.kt - Ajustado
 
-    private val repository = VinhoRepository()
+class VinhoViewModel(
+    private val repository: VinhoRepository
+) : ViewModel() {
 
-    private val _vinhos = MutableLiveData<List<Wine>>()
-    val vinhos: LiveData<List<Wine>> = _vinhos
+    private val _vinhosFiltrados = MutableLiveData<List<Wine>>()
+    val vinhosFiltrados: LiveData<List<Wine>> = _vinhosFiltrados
 
-    private val _error = MutableLiveData<String?>()
-    val error: LiveData<String?> = _error
-
-    private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> = _loading
-
-    fun carregarVinhos() {
-        _loading.value = true
-
+    fun buscarVinhos(
+        selectedFoods: List<String>,
+        selectedWineType: String,
+        onError: (Throwable) -> Unit
+    ) {
         repository.fetchVinhos(
-            onSuccess = { lista ->
-                val vinhosComPreco = mutableListOf<Wine>()
-
-                lista.forEach { vinho ->
-                    vinho.price = ""
-                    vinhosComPreco.add(vinho)
-
-                    if (vinhosComPreco.size == lista.size) {
-                        _vinhos.postValue(vinhosComPreco)
-                        _loading.postValue(false)
-                    }
-                }
+            selectedFoods = selectedFoods,
+            selectedWineType = selectedWineType,
+            onSuccess = { vinhos ->
+                _vinhosFiltrados.postValue(vinhos)
             },
-            onError = {
-                _error.postValue(it.message)
-                _loading.postValue(false)
-            }
+            onError = onError
         )
     }
 }
